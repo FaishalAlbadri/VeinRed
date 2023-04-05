@@ -42,16 +42,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/img_logo" />
 
-    <TextView
-        android:id="@+id/txt_hello_desc"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:lineSpacingExtra="4dp"
-        android:text="Siap untuk .... .. ... ..... ...... ......?"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_hello" />
-
     <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/edt_name"
         android:layout_width="match_parent"
@@ -60,7 +50,7 @@
         android:hint="Nama Pengguna"
         android:inputType="text"
         android:maxLines="1"
-        app:layout_constraintTop_toBottomOf="@+id/txt_hello_desc"
+        app:layout_constraintTop_toBottomOf="@+id/txt_hello"
         app:met_errorColor="#D50000"
         app:met_floatingLabel="highlight" />
 
@@ -77,18 +67,6 @@
         app:met_floatingLabel="highlight" />
 
     <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/edt_phone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="Nomor Handphone"
-        android:inputType="number"
-        android:maxLines="1"
-        app:layout_constraintTop_toBottomOf="@+id/edt_email"
-        app:met_errorColor="#D50000"
-        app:met_floatingLabel="highlight" />
-
-    <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/edt_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -96,7 +74,7 @@
         android:hint="Password"
         android:inputType="textPassword"
         android:maxLines="1"
-        app:layout_constraintTop_toBottomOf="@+id/edt_phone"
+        app:layout_constraintTop_toBottomOf="@+id/edt_email"
         app:met_errorColor="#D50000"
         app:met_floatingLabel="highlight" />
 
@@ -121,6 +99,17 @@
         android:text="Register"
         android:textColor="#ffffff"
         app:layout_constraintTop_toBottomOf="@+id/edt_repassword" />
+
+    <CheckBox
+        android:id="@+id/btn_show_pass"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center_vertical"
+        android:text="Tampilkan Password"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_register" />
 
     <TextView
         android:id="@+id/btn_login"

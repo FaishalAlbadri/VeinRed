@@ -1,25 +1,32 @@
 package com.tugasakhir.veinred.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
 import com.tugasakhir.veinred.R;
+import com.tugasakhir.veinred.base.BaseActivityFullScreen;
+import com.tugasakhir.veinred.util.session.SessionUser;
+import com.tugasakhir.veinred.util.session.User;
 
-public class SplashScreenActivity extends AppCompatActivity {
+public class SplashScreenActivity extends BaseActivityFullScreen {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
         setContentView(R.layout.activity_splash_screen);
+
+        SessionUser.getInstance(this).setDataUser();
 
         Handler handler = new Handler();
         handler.postDelayed(() -> {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-            finish();
+            if (User.getInstance().getUser_email() == null && User.getInstance().getUser_password() == null) {
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                finish();
+            } else {
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                finish();
+            }
         }, 3000);
     }
 }
