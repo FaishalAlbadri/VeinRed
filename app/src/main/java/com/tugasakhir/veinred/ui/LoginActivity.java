@@ -10,11 +10,14 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.widget.Toast;
 
+import com.tugasakhir.veinred.data.user.UserItem;
 import com.tugasakhir.veinred.databinding.ActivityLoginBinding;
 import com.tugasakhir.veinred.di.LoginRepositoryInject;
 import com.tugasakhir.veinred.presenter.login.LoginContract;
 import com.tugasakhir.veinred.presenter.login.LoginPresenter;
 import com.tugasakhir.veinred.util.session.SessionManager;
+
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.loginView {
 
@@ -70,8 +73,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.lo
     }
 
     @Override
-    public void onSuccessLogin(String id_user) {
-        sessionManager.createUser(id_user, binding.edtEmail.getText().toString(), binding.edtPassword.getText().toString());
+    public void onSuccessLogin(List<UserItem> userItems) {
+        sessionManager.createUser(userItems.get(0).getIdUser(), binding.edtEmail.getText().toString(), binding.edtPassword.getText().toString());
         pd.dismiss();
         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
         finish();

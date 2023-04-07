@@ -34,7 +34,7 @@ public class LoginDataRemote implements LoginDataResource {
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 try {
                     if (response.body().getMsg().equals("Berhasil")) {
-                        loginGetCallback.onSuccessLogin(response.body().getUser().get(0).getIdUser());
+                        loginGetCallback.onSuccessLogin(response.body().getUser());
                     } else {
                         loginGetCallback.onErrorLogin(response.body().getMsg());
                     }

@@ -13,6 +13,7 @@ import com.tugasakhir.veinred.data.DataMenu;
 import com.tugasakhir.veinred.databinding.ItemMenuBinding;
 import com.tugasakhir.veinred.ui.GalleryActivity;
 import com.tugasakhir.veinred.ui.NewsActivity;
+import com.tugasakhir.veinred.ui.ProfileActivity;
 
 import java.util.List;
 
@@ -48,6 +49,7 @@ public class MenuHomeAdapter extends RecyclerView.Adapter<MenuHomeAdapter.MenuHo
             } else if (dataMenu.getTitle().equals("Berita")) {
                 context.startActivity(new Intent(context, NewsActivity.class));
             } else {
+                context.startActivity(new Intent(context, ProfileActivity.class));
             }
         });
     }

@@ -1,7 +1,10 @@
 package com.tugasakhir.veinred.presenter.login;
 
+import com.tugasakhir.veinred.data.user.UserItem;
 import com.tugasakhir.veinred.repository.login.LoginDataResource;
 import com.tugasakhir.veinred.repository.login.LoginRepository;
+
+import java.util.List;
 
 public class LoginPresenter implements LoginContract.loginPresenter {
 
@@ -16,8 +19,8 @@ public class LoginPresenter implements LoginContract.loginPresenter {
     public void getDataLogin(String user_email, String user_password) {
         loginRepository.getLoginResult(user_email, user_password, new LoginDataResource.LoginGetCallback() {
             @Override
-            public void onSuccessLogin(String id_user) {
-                loginView.onSuccessLogin(id_user);
+            public void onSuccessLogin(List<UserItem> userItems) {
+                loginView.onSuccessLogin(userItems);
             }
 
             @Override

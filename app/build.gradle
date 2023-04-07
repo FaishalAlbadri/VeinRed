@@ -52,6 +52,7 @@ dependencies {
     implementation files('libs/androidsdk-release.aar')
     implementation files('libs/thermalsdk-release.aar')
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'jp.wasabeef:glide-transformations:4.3.0'
     implementation 'androidx.core:core-ktx:1.9.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
