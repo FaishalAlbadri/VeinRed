@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.tugasakhir.veinred.data.DataMenu;
 import com.tugasakhir.veinred.databinding.ItemMenuBinding;
+import com.tugasakhir.veinred.ui.GalleryActivity;
 import com.tugasakhir.veinred.ui.NewsActivity;
 
 import java.util.List;
@@ -43,6 +44,7 @@ public class MenuHomeAdapter extends RecyclerView.Adapter<MenuHomeAdapter.MenuHo
         holder.binding.layoutMenu.setOnClickListener(v -> {
             if (dataMenu.getTitle().equals("Kamera")) {
             } else if (dataMenu.getTitle().equals("Galeri")) {
+                context.startActivity(new Intent(context, GalleryActivity.class));
             } else if (dataMenu.getTitle().equals("Berita")) {
                 context.startActivity(new Intent(context, NewsActivity.class));
             } else {
