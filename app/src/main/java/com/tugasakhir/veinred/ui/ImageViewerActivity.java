@@ -73,5 +73,9 @@ public class ImageViewerActivity extends AppCompatActivity {
             alertDialogBuilder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
             alertDialogBuilder.show();
         });
+
+        binding.btnBack.setOnClickListener(v -> {
+            finish();
+        });
     }
 }

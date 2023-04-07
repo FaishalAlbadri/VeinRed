@@ -1,6 +1,7 @@
 package com.tugasakhir.veinred.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -11,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.tugasakhir.veinred.api.Server;
 import com.tugasakhir.veinred.data.news.NewsItem;
 import com.tugasakhir.veinred.databinding.ItemNewsBinding;
+import com.tugasakhir.veinred.ui.NewsDetailActivity;
 
 import java.util.List;
 
@@ -41,6 +43,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterHol
         holder.binding.txtJudul.setText(newsItem.getNewsJudul());
         holder.binding.txtDesc.setText(newsItem.getNewsDesc());
         holder.binding.txtDate.setText(newsItem.getNewsCreate());
+
+        holder.binding.btnNews.setOnClickListener(v -> {
+            context.startActivity(new Intent(context, NewsDetailActivity.class)
+                    .putExtra("img", newsItem.getNewsImg())
+                    .putExtra("judul", newsItem.getNewsJudul())
+                    .putExtra("date", newsItem.getNewsCreate())
+                    .putExtra("desc", newsItem.getNewsDesc())
+            );
+        });
     }
 
     @Override

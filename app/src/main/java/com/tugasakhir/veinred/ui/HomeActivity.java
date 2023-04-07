@@ -8,7 +8,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -19,7 +18,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -175,17 +173,16 @@ public class HomeActivity extends AppCompatActivity implements NewsContract.news
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setLocalImage();
-    }
-
     private boolean checkBefore30() {
         return ContextCompat.checkSelfPermission(HomeActivity.this,
                 Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setLocalImage();
+    }
 
     private void requestBefore30() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(HomeActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)) {

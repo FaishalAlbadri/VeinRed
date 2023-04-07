@@ -1,22 +1,24 @@
 package com.tugasakhir.veinred.adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.tugasakhir.veinred.data.DataMenu;
 import com.tugasakhir.veinred.databinding.ItemMenuBinding;
+import com.tugasakhir.veinred.ui.NewsActivity;
 
 import java.util.List;
 
 public class MenuHomeAdapter extends RecyclerView.Adapter<MenuHomeAdapter.MenuHomeAdapterHolder> {
 
     private List<DataMenu> listData;
+    private Context context;
 
     public MenuHomeAdapter(List<DataMenu> listData) {
         this.listData = listData;
@@ -26,6 +28,7 @@ public class MenuHomeAdapter extends RecyclerView.Adapter<MenuHomeAdapter.MenuHo
     @Override
     public MenuHomeAdapterHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ItemMenuBinding binding = ItemMenuBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        context = parent.getContext();
         return new MenuHomeAdapterHolder(binding);
     }
 
@@ -39,15 +42,11 @@ public class MenuHomeAdapter extends RecyclerView.Adapter<MenuHomeAdapter.MenuHo
 
         holder.binding.layoutMenu.setOnClickListener(v -> {
             if (dataMenu.getTitle().equals("Kamera")) {
-
             } else if (dataMenu.getTitle().equals("Galeri")) {
-
             } else if (dataMenu.getTitle().equals("Berita")) {
-
+                context.startActivity(new Intent(context, NewsActivity.class));
             } else {
-
             }
-            Toast.makeText(v.getContext(), dataMenu.getTitle(), Toast.LENGTH_SHORT).show();
         });
     }
 
