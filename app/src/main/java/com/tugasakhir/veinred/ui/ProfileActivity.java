@@ -67,6 +67,7 @@ public class ProfileActivity extends AppCompatActivity implements LoginContract.
         pd.setCancelable(false);
         pd.setCanceledOnTouchOutside(false);
         pd.setMessage("Loading");
+        pd.show();
         loginPresenter = new LoginPresenter(LoginRepositoryInject.provideToRepository(this));
         loginPresenter.onAttachView(this);
         loginPresenter.getDataLogin(User.getInstance().getUser_email(), User.getInstance().getUser_password());
@@ -75,8 +76,6 @@ public class ProfileActivity extends AppCompatActivity implements LoginContract.
     @Override
     public void onSuccessLogin(List<UserItem> userItems) {
         UserItem data = userItems.get(0);
-//        circleImage(binding.imgProfile, Server.BASE_URL_IMG + "user/" + data.getUserImage(), true);
-
         Glide.with(this).load(Server.BASE_URL_IMG + "user/" + data.getUserImage()).transform(new BorderTransformation()).into(binding.imgProfile);
         binding.txtNameValue.setText(data.getUserName());
         binding.txtEmailValue.setText(data.getUserEmail());
