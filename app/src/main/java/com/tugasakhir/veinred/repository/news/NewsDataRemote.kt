@@ -34,7 +34,7 @@ class NewsDataRemote : NewsDataResource {
                         newsCallback.onSuccessNews(newsItem, response.body()!!.user.get(0).userName, response.body()!!.msg)
 
                     } else {
-                        newsCallback.onErrorNews(response.body()!!.msg)
+                        newsCallback.onErrorNews(response.body()!!.user.get(0).userName, response.body()!!.msg)
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -42,7 +42,7 @@ class NewsDataRemote : NewsDataResource {
             }
 
             override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
-                newsCallback.onErrorNews(Server.CHECK_INTERNET_CONNECTION)
+                newsCallback.onErrorNews("Tidak Ada Koneksi Internet", Server.CHECK_INTERNET_CONNECTION)
             }
 
         })

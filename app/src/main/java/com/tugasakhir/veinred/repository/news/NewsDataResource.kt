@@ -9,6 +9,6 @@ interface NewsDataResource {
 
     interface NewsCallback {
         fun onSuccessNews(newsListItem: List<NewsItem>, username: String, msg: String)
-        fun onErrorNews(msg: String)
+        fun onErrorNews(username: String, msg: String)
     }
 }

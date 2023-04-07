@@ -7,7 +7,7 @@ class NewsContract {
 
     interface newsView {
         fun onSuccessNews(newsListItem: List<NewsItem>, username: String, msg: String)
-        fun onErrorNews(msg: String)
+        fun onErrorNews(username: String, msg: String)
     }
 
     interface newsPresenter: BasePresenter<newsView> {

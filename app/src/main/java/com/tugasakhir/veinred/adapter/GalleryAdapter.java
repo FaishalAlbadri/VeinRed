@@ -3,12 +3,15 @@ package com.tugasakhir.veinred.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 import com.tugasakhir.veinred.data.DataImageLocal;
 import com.tugasakhir.veinred.databinding.ItemGalleryBinding;
+import com.tugasakhir.veinred.ui.GalleryActivity;
 import com.tugasakhir.veinred.ui.ImageViewerActivity;
 import java.util.List;
 
@@ -42,6 +45,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryA
                     .putExtra("image", dataImageLocal.getPath())
                     .putExtra("title", dataImageLocal.getTitle())
             );
+        });
+
+        holder.binding.layout.setOnLongClickListener(v -> {
+            Snackbar.make(((GalleryActivity) context).binding.parentlayout, dataImageLocal.getTitle(), Snackbar.LENGTH_LONG).show();
+            return true;
         });
     }
 

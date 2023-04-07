@@ -19,8 +19,8 @@ class NewsPresenter : NewsContract.newsPresenter {
                 newsView.onSuccessNews(newsListItem, username, msg)
             }
 
-            override fun onErrorNews(msg: String) {
-                newsView.onErrorNews(msg)
+            override fun onErrorNews(username: String, msg: String) {
+                newsView.onErrorNews(username, msg)
             }
 
         })

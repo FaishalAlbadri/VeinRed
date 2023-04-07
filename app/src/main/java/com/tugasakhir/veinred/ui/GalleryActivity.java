@@ -34,7 +34,7 @@ import java.util.Comparator;
 
 public class GalleryActivity extends AppCompatActivity {
 
-    private ActivityGalleryBinding binding;
+    public ActivityGalleryBinding binding;
     private GalleryAdapter galleryAdapter;
     private ArrayList<DataImageLocal> imageLocalArrayList = new ArrayList<>();
 

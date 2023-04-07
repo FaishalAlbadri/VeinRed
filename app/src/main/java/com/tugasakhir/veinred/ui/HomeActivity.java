@@ -167,10 +167,16 @@ public class HomeActivity extends AppCompatActivity implements NewsContract.news
     }
 
     @Override
-    public void onErrorNews(@NonNull String msg) {
+    public void onErrorNews(@NonNull String username, @NonNull String msg) {
         binding.refreshNews.setRefreshing(false);
         pd.cancel();
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        binding.txtNama.setText(username);
+        if (msg.equals("Belum ada berita")) {
+            binding.txtBeritaBlank.setVisibility(View.VISIBLE);
+            binding.rvBerita.setVisibility(View.GONE);
+        } else {
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private boolean checkBefore30() {

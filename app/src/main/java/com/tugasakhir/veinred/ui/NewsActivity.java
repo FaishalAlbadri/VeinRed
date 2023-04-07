@@ -70,7 +70,7 @@ public class NewsActivity extends AppCompatActivity implements NewsContract.news
     }
 
     @Override
-    public void onErrorNews(@NonNull String msg) {
+    public void onErrorNews(@NonNull String username, @NonNull String msg) {
         binding.refreshNews.setRefreshing(false);
         pd.cancel();
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
