@@ -17,4 +17,41 @@
     <string name="deteksi_discovering">
     <![CDATA[Status Deteksi : <font color=#22bb33>Discovering</font>]]>
     </string>
+
+
+
+    <string name="temperature_logs">Current 5-min Temp Log</string>
+    <string name="atmospheric_temperature_c">Atmospheric Temperature (°C): </string>
+    <string name="degrees_celsius">Degrees Celsius</string>
+    <string name="external_optics_temperature_c">External Optics Temperature (°C): </string>
+    <string name="distance_unit">Distance Unit: </string>
+    <string name="color_palette">Color Palette: </string>
+    <string name="distance">Distance: </string>
+    <string name="emissivity">Emissivity: </string>
+    <string name="external_optics_transmission">External Optics Transmission: </string>
+    <string name="relative_humidity">Relative Humidity: </string>
+    <string name="transmission">Transmission: </string>
+    <string name="reflective_temperature_c">Reflective Temperature (°C): </string>
+
+    <string-array name="distance_units">
+        <item>FEET</item>
+        <item>METER</item>
+    </string-array>
+
+    <string-array name="palettes">
+        <item>iron</item>
+        <item>Arctic</item>
+        <item>blackhot</item>
+        <item>bw</item>
+        <item>Coldest</item>
+        <item>ColorWheel_Redhot</item>
+        <item>ColorWheel6</item>
+        <item>ColorWheel12</item>
+        <item>DoubleRainbow2</item>
+        <item>lava</item>
+        <item>rainbow</item>
+        <item>rainHC</item>
+        <item>whitehot</item>
+        <item>Hottest</item>
+    </string-array>
 </resources>

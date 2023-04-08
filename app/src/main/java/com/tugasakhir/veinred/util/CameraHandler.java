@@ -40,7 +40,7 @@ public class CameraHandler {
 
     private StreamDataListener streamDataListener;
     private static TemperatureUnit temperatureUnit = TemperatureUnit.CELSIUS;
-    static HashMap<Long,String> tempLog = new HashMap<>();
+    public static HashMap<Long,String> tempLog = new HashMap<>();
     private Long currentReadingStartMillis;
 
     public interface StreamDataListener {
@@ -83,12 +83,12 @@ public class CameraHandler {
         discoveryStatus.stopped();
     }
 
-    void connectCamera(Identity identity, ConnectionStatusListener connectionStatusListener) throws IOException {
+    public void connectCamera(Identity identity, ConnectionStatusListener connectionStatusListener) throws IOException {
         camera = new Camera();
         camera.connect(identity, connectionStatusListener);
     }
 
-    void disconnectCamera() {
+    public void disconnectCamera() {
         if (camera != null) {
             if (camera.isGrabbing()) {
                 camera.unsubscribeAllStreams();
@@ -102,7 +102,7 @@ public class CameraHandler {
      *
      * @param listener CameraHandler.StreamDataListener that adds the frames to the buffer
      */
-    void startStream(StreamDataListener listener) {
+    public void startStream(StreamDataListener listener) {
         this.streamDataListener = listener;
         camera.subscribeStream(thermalImageStreamListener);
     }
@@ -388,7 +388,7 @@ public class CameraHandler {
     }
 
 
-    static void saveLog(Context ctx, boolean shouldAppend) {
+    public static void saveLog(Context ctx, boolean shouldAppend) {
         StringBuilder msgLog = new StringBuilder();
         Date date;
 
@@ -423,7 +423,7 @@ public class CameraHandler {
         }
     }
 
-    static void resetLog() {
+    public static void resetLog() {
         CameraHandler.tempLog.clear();
     }
 

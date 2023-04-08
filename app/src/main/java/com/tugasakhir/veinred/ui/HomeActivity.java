@@ -28,6 +28,7 @@ import com.flir.thermalsdk.live.CommunicationInterface;
 import com.flir.thermalsdk.live.Identity;
 import com.flir.thermalsdk.live.discovery.DiscoveryEventListener;
 import com.flir.thermalsdk.log.ThermalLog;
+import com.google.android.material.snackbar.Snackbar;
 import com.tugasakhir.veinred.R;
 import com.tugasakhir.veinred.adapter.FotoHomeAdapter;
 import com.tugasakhir.veinred.adapter.MenuHomeAdapter;
@@ -92,15 +93,14 @@ public class HomeActivity extends AppCompatActivity implements NewsContract.news
         pd.setMessage("Loading");
         pd.show();
 
-        OpenCVLoader.initDebug();
-        ThermalSdkAndroid.init(getApplicationContext(), ThermalLog.LogLevel.WARNING);
-        cameraHandler = new CameraHandler();
-        startDiscovery();
-
         Util.refreshColor(binding.refreshNews);
         binding.refreshNews.setOnRefreshListener(() -> newsPresenter.news("5"));
         binding.txtStatusConnect.setText(Util.fromHtml(R.string.koneksi_disconnect, getApplicationContext()));
         binding.txtStatusDiscovery.setText(Util.fromHtml(R.string.deteksi_not_discovering, getApplicationContext()));
+
+        OpenCVLoader.initDebug();
+        ThermalSdkAndroid.init(getApplicationContext(), ThermalLog.LogLevel.WARNING);
+        cameraHandler = new CameraHandler();
     }
 
     private void setNews() {
@@ -213,7 +213,15 @@ public class HomeActivity extends AppCompatActivity implements NewsContract.news
     @Override
     protected void onResume() {
         super.onResume();
+        cameraOnResume();
         setLocalImage();
+    }
+
+    private void cameraOnResume() {
+        gotoCamera = false;
+        binding.txtStatusConnect.setText(Util.fromHtml(R.string.koneksi_disconnect, getApplicationContext()));
+        binding.txtStatusDiscovery.setText(Util.fromHtml(R.string.deteksi_not_discovering, getApplicationContext()));
+        startDiscovery();
     }
 
     private void requestBefore30() {
@@ -338,7 +346,7 @@ public class HomeActivity extends AppCompatActivity implements NewsContract.news
                 gotoCamera = false;
                 binding.txtStatusConnect.setText(Util.fromHtml(R.string.koneksi_disconnect, getApplicationContext()));
                 stopDiscovery();
-                Toast.makeText(HomeActivity.this, "onDiscoveryError communicationInterface:" + communicationInterface + " errorCode:" + errorCode, Toast.LENGTH_SHORT).show();
+                Snackbar.make(binding.parentlayout, "onDiscoveryError communicationInterface:" + communicationInterface + " errorCode:" + errorCode, Snackbar.LENGTH_LONG).show();
             });
         }
 
