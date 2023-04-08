@@ -2,7 +2,7 @@ package com.tugasakhir.veinred.util;
 
 import android.graphics.Bitmap;
 
-class BitmapFrameBuffer {
+public class BitmapFrameBuffer {
     final Bitmap msxBitmap;
     final Bitmap dcBitmap;
     BitmapFrameBuffer(Bitmap msxBitmap, Bitmap dcBitmap){

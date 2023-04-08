@@ -22,7 +22,7 @@ public class SplashScreenActivity extends BaseActivityFullScreen {
         SessionUser.getInstance(this).setDataUser();
 
         try {
-            File root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "veinred");
+            File root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "veinred");
             if (!root.exists()) {
                 root.mkdirs();
             }

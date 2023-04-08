@@ -34,7 +34,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Objects;
 
-class CameraHandler {
+public class CameraHandler {
 
     private static final String TAG = "CameraHandler";
 

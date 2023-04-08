@@ -41,7 +41,7 @@ public class ImageWriter {
      * @param time  Current timestamp
      */
     private void writeImage(Bitmap image, String name, String time) {
-        String IMAGES_FOLDER_NAME = "FLIR_App";
+        String IMAGES_FOLDER_NAME = "veinred";
         OutputStream out = null;
 
         try {

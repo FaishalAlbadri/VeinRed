@@ -72,7 +72,7 @@ public class GalleryActivity extends AppCompatActivity {
         binding.rvGallery.setLayoutManager(new GridLayoutManager(this, 3));
         binding.rvGallery.setAdapter(galleryAdapter);
         galleryAdapter.delete();
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "veinred");
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "veinred");
         File[] files = file.listFiles();
         Arrays.sort(files, Comparator.comparingLong(File::lastModified));
         if (files != null) {

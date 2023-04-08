@@ -108,7 +108,7 @@ public class HomeActivity extends AppCompatActivity implements NewsContract.news
         binding.rvFoto.setLayoutManager(new LinearLayoutManager(HomeActivity.this, LinearLayoutManager.HORIZONTAL, false));
         binding.rvFoto.setAdapter(fotoHomeAdapter);
         fotoHomeAdapter.delete();
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "veinred");
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "veinred");
         File[] files = file.listFiles();
         Arrays.sort(files, Comparator.comparingLong(File::lastModified));
         if (files != null) {
