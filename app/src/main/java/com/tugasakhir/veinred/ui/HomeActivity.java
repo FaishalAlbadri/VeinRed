@@ -55,7 +55,7 @@ import java.util.List;
 public class HomeActivity extends AppCompatActivity implements NewsContract.newsView {
 
     private static final String TAG = "HomeActivity";
-    private ActivityHomeBinding binding;
+    public ActivityHomeBinding binding;
     private ArrayList<DataMenu> menuArrayList = new ArrayList<>();
     private ArrayList<DataImageLocal> imageLocalArrayList = new ArrayList<>();
 
