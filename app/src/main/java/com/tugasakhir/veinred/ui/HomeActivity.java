@@ -18,9 +18,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.flir.thermalsdk.ErrorCode;
+import com.flir.thermalsdk.androidsdk.ThermalSdkAndroid;
+import com.flir.thermalsdk.live.CommunicationInterface;
+import com.flir.thermalsdk.live.Identity;
+import com.flir.thermalsdk.live.discovery.DiscoveryEventListener;
+import com.flir.thermalsdk.log.ThermalLog;
 import com.tugasakhir.veinred.R;
 import com.tugasakhir.veinred.adapter.FotoHomeAdapter;
 import com.tugasakhir.veinred.adapter.MenuHomeAdapter;
@@ -32,7 +39,12 @@ import com.tugasakhir.veinred.databinding.ActivityHomeBinding;
 import com.tugasakhir.veinred.di.NewsRepositoryInject;
 import com.tugasakhir.veinred.presenter.news.NewsContract;
 import com.tugasakhir.veinred.presenter.news.NewsPresenter;
+import com.tugasakhir.veinred.util.CameraHandler;
 import com.tugasakhir.veinred.util.Util;
+
+import org.opencv.android.OpenCVLoader;
+
+import static com.tugasakhir.veinred.base.VeinredApplication.cameraHandler;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,6 +54,7 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements NewsContract.newsView {
 
+    private static final String TAG = "HomeActivity";
     private ActivityHomeBinding binding;
     private ArrayList<DataMenu> menuArrayList = new ArrayList<>();
     private ArrayList<DataImageLocal> imageLocalArrayList = new ArrayList<>();
@@ -55,6 +68,8 @@ public class HomeActivity extends AppCompatActivity implements NewsContract.news
 
     private ProgressDialog pd;
 
+    public Boolean gotoCamera = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +79,10 @@ public class HomeActivity extends AppCompatActivity implements NewsContract.news
         setMenu();
         setFotoLokal();
         setNews();
+
+        binding.btnConnectCamera.setOnClickListener(v -> {
+            startDiscovery();
+        });
     }
 
     private void setView() {
@@ -73,8 +92,15 @@ public class HomeActivity extends AppCompatActivity implements NewsContract.news
         pd.setMessage("Loading");
         pd.show();
 
+        OpenCVLoader.initDebug();
+        ThermalSdkAndroid.init(getApplicationContext(), ThermalLog.LogLevel.WARNING);
+        cameraHandler = new CameraHandler();
+        startDiscovery();
+
         Util.refreshColor(binding.refreshNews);
         binding.refreshNews.setOnRefreshListener(() -> newsPresenter.news("5"));
+        binding.txtStatusConnect.setText(Util.fromHtml(R.string.koneksi_disconnect, getApplicationContext()));
+        binding.txtStatusDiscovery.setText(Util.fromHtml(R.string.deteksi_not_discovering, getApplicationContext()));
     }
 
     private void setNews() {
@@ -266,4 +292,59 @@ public class HomeActivity extends AppCompatActivity implements NewsContract.news
             }
         }
     }
+
+    public void startDiscovery() {
+        cameraHandler.startDiscovery(cameraDiscoveryListener, discoveryStatusListener);
+    }
+
+    public void stopDiscovery() {
+        cameraHandler.stopDiscovery(discoveryStatusListener);
+    }
+
+    public CameraHandler.DiscoveryStatus discoveryStatusListener = new CameraHandler.DiscoveryStatus() {
+        @Override
+        public void started() {
+            binding.txtStatusDiscovery.setText(Util.fromHtml(R.string.deteksi_discovering, getApplicationContext()));
+        }
+
+        @Override
+        public void stopped() {
+            binding.txtStatusDiscovery.setText(Util.fromHtml(R.string.deteksi_not_discovering, getApplicationContext()));
+        }
+    };
+
+    private DiscoveryEventListener cameraDiscoveryListener = new DiscoveryEventListener() {
+        @Override
+        public void onCameraFound(Identity identity) {
+            Log.d(TAG, "onCameraFound identity:" + identity);
+            runOnUiThread(() -> {
+                if (identity.deviceId.contains("EMULATED FLIR ONE") || identity.deviceId.contains("C++ Emulator")) {
+                    Log.i("demo emulator", "success");
+                } else {
+                    gotoCamera = true;
+                    binding.txtStatusConnect.setText(Util.fromHtml(R.string.koneksi_connect, getApplicationContext()));
+
+                }
+
+                cameraHandler.addFoundCameraIdentity(identity);
+                stopDiscovery();
+            });
+        }
+
+        @Override
+        public void onDiscoveryError(CommunicationInterface communicationInterface, ErrorCode errorCode) {
+            Log.e(TAG, "onDiscoveryError communicationInterface:" + communicationInterface + " errorCode:" + errorCode);
+            runOnUiThread(() -> {
+                gotoCamera = false;
+                binding.txtStatusConnect.setText(Util.fromHtml(R.string.koneksi_disconnect, getApplicationContext()));
+                stopDiscovery();
+                Toast.makeText(HomeActivity.this, "onDiscoveryError communicationInterface:" + communicationInterface + " errorCode:" + errorCode, Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        @Override
+        public void onDiscoveryFinished(CommunicationInterface communicationInterface) {
+            Log.d(TAG, "onDiscoveryFinished: Discovery Finished");
+        }
+    };
 }

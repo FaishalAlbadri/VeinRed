@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.tugasakhir.veinred.data.DataMenu;
 import com.tugasakhir.veinred.databinding.ItemMenuBinding;
+import com.tugasakhir.veinred.ui.CameraActivity;
 import com.tugasakhir.veinred.ui.GalleryActivity;
+import com.tugasakhir.veinred.ui.HomeActivity;
 import com.tugasakhir.veinred.ui.NewsActivity;
 import com.tugasakhir.veinred.ui.ProfileActivity;
 
@@ -44,6 +47,12 @@ public class MenuHomeAdapter extends RecyclerView.Adapter<MenuHomeAdapter.MenuHo
 
         holder.binding.layoutMenu.setOnClickListener(v -> {
             if (dataMenu.getTitle().equals("Kamera")) {
+                Boolean connect = ((HomeActivity) context).gotoCamera;
+                if (connect) {
+                    context.startActivity(new Intent(context, CameraActivity.class));
+                } else {
+                    Toast.makeText(context, "Kamera Flir One belum disambungkan!", Toast.LENGTH_SHORT).show();
+                }
             } else if (dataMenu.getTitle().equals("Galeri")) {
                 context.startActivity(new Intent(context, GalleryActivity.class));
             } else if (dataMenu.getTitle().equals("Berita")) {

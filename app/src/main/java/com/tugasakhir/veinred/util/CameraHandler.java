@@ -64,13 +64,13 @@ public class CameraHandler {
         void stopped();
     }
 
-    CameraHandler() {
+    public CameraHandler() {
     }
 
     /**
      * Start discovery of USB and Emulators
      */
-    void startDiscovery(DiscoveryEventListener cameraDiscoveryListener, DiscoveryStatus discoveryStatus) {
+    public void startDiscovery(DiscoveryEventListener cameraDiscoveryListener, DiscoveryStatus discoveryStatus) {
         DiscoveryFactory.getInstance().scan(cameraDiscoveryListener, CommunicationInterface.EMULATOR, CommunicationInterface.USB);
         discoveryStatus.started();
     }
@@ -78,7 +78,7 @@ public class CameraHandler {
     /**
      * Stop discovery of USB and Emulators
      */
-    void stopDiscovery(DiscoveryStatus discoveryStatus) {
+    public void stopDiscovery(DiscoveryStatus discoveryStatus) {
         DiscoveryFactory.getInstance().stop(CommunicationInterface.EMULATOR, CommunicationInterface.USB);
         discoveryStatus.stopped();
     }
@@ -121,7 +121,7 @@ public class CameraHandler {
      *
      * @param identity Camera Identity to add to list of found cameras
      */
-    void addFoundCameraIdentity(Identity identity) {
+    public void addFoundCameraIdentity(Identity identity) {
         cameraIndentities.add(identity);
     }
 

@@ -10,4 +10,7 @@
 
     <color name="primary">#ffffff</color>
     <color name="secondary">#000000</color>
+
+    <color name="success">#22bb33</color>
+    <color name="failed">#bb2124</color>
 </resources>

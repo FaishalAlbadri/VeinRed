@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">VeinRed</string>
+
+    <string name="koneksi_disconnect">
+    <![CDATA[Status Koneksi : <font color=#bb2124>Disconnect</font>]]>
+    </string>
+
+    <string name="koneksi_connect">
+    <![CDATA[Status Koneksi : <font color=#22bb33>Connect</font>]]>
+    </string>
+
+
+    <string name="deteksi_not_discovering">
+    <![CDATA[Status Deteksi : <font color=#bb2124>Not Discovering</font>]]>
+    </string>
+
+    <string name="deteksi_discovering">
+    <![CDATA[Status Deteksi : <font color=#22bb33>Discovering</font>]]>
+    </string>
 </resources>
