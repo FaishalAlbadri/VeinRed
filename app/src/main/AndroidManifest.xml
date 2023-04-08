@@ -17,12 +17,13 @@
         tools:node="merge" />
 
     <application
+        android:name=".base.VeinredApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:enableOnBackInvokedCallback="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -33,7 +34,7 @@
         <activity
             android:name=".ui.ProfileActivity"
             android:exported="false"
-            android:screenOrientation="portrait"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.GalleryActivity"
             android:exported="false"
