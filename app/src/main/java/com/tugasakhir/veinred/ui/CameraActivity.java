@@ -27,7 +27,6 @@ import static com.tugasakhir.veinred.base.VeinredApplication.connectedCameraIden
 import org.opencv.android.OpenCVLoader;
 
 import java.io.IOException;
-import java.util.Objects;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class CameraActivity extends AppCompatActivity {
@@ -36,7 +35,7 @@ public class CameraActivity extends AppCompatActivity {
     private ActivityCameraBinding binding;
     public UsbPermissionHandler usbPermissionHandler = new UsbPermissionHandler();
     public LinkedBlockingQueue<BitmapFrameBuffer> framesBuffer = new LinkedBlockingQueue<>(21);
-    public static FusionMode curr_fusion_mode = FusionMode.THERMAL_ONLY;
+    public static FusionMode curr_fusion_mode = FusionMode.THERMAL_FUSION;
     ScaleGestureDetector mScaleGestureDetector;
     private ImageWriter imageWriter = null;
     public static double left = 0;
@@ -45,6 +44,8 @@ public class CameraActivity extends AppCompatActivity {
     public static double height = 200;
     int touchx = -1;
     int touchy = -1;
+
+    int modeCamera = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,19 +62,27 @@ public class CameraActivity extends AppCompatActivity {
         OpenCVLoader.initDebug();
         mScaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
         connectCamera(cameraHandler.getFlirOne());
+
+        binding.btnSwitchCamera.setOnClickListener(v -> {
+            if (modeCamera == 0) {
+                modeCamera = 1;
+            } else {
+                modeCamera = 0;
+            }
+        });
     }
 
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         @Override
-        public boolean onScale(ScaleGestureDetector scaleGestureDetector){
-            if(binding.imgCamera!=null && CameraHandler.thermal_width != -1 && CameraHandler.thermal_height != -1){
+        public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
+            if (binding.imgCamera != null && CameraHandler.thermal_width != -1 && CameraHandler.thermal_height != -1) {
                 double pos_w = width * scaleGestureDetector.getScaleFactor();
                 double pos_h = height * scaleGestureDetector.getScaleFactor();
 
-                touchx = (int)(scaleGestureDetector.getFocusX());
-                touchy = (int)(scaleGestureDetector.getFocusY());
+                touchx = (int) (scaleGestureDetector.getFocusX());
+                touchy = (int) (scaleGestureDetector.getFocusY());
 
-                if(pos_w > 0 && pos_h > 0 && left+pos_w < CameraHandler.thermal_width && top + pos_h < CameraHandler.thermal_height){
+                if (pos_w > 0 && pos_h > 0 && left + pos_w < CameraHandler.thermal_width && top + pos_h < CameraHandler.thermal_height) {
                     width = pos_w;
                     height = pos_h;
                 }
@@ -86,7 +95,7 @@ public class CameraActivity extends AppCompatActivity {
         imageWriter = new ImageWriter(this);
     }
 
-    private void  disconnectCamera() {
+    private void disconnectCamera() {
         connectedCameraIdentity = null;
         Log.d(TAG, "disconnect: Called with: connectedCameraIdentity = [" + connectedCameraIdentity + "]");
         new Thread(() -> {
@@ -114,6 +123,7 @@ public class CameraActivity extends AppCompatActivity {
             connectDevice(identity);
         }
     }
+
     private void connectDevice(Identity identity) {
         new Thread(() -> {
             try {
@@ -139,7 +149,11 @@ public class CameraActivity extends AppCompatActivity {
         @Override
         public void images(BitmapFrameBuffer dataHolder) {
             runOnUiThread(() -> {
-                binding.imgCamera.setImageBitmap(dataHolder.dcBitmap);
+                if (modeCamera == 0) {
+                    binding.imgCamera.setImageBitmap(dataHolder.dcBitmap);
+                } else {
+                    binding.imgCamera.setImageBitmap(dataHolder.msxBitmap);
+                }
             });
         }
 
@@ -156,7 +170,11 @@ public class CameraActivity extends AppCompatActivity {
                 Log.d(TAG, "framebuffer size:" + framesBuffer.size());
                 BitmapFrameBuffer poll = framesBuffer.poll();
                 if (poll != null) {
-                    binding.imgCamera.setImageBitmap(poll.dcBitmap);
+                    if (modeCamera == 0) {
+                        binding.imgCamera.setImageBitmap(poll.dcBitmap);
+                    } else {
+                        binding.imgCamera.setImageBitmap(poll.msxBitmap);
+                    }
                 }
             });
         }

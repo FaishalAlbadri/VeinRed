@@ -12,13 +12,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:src="@color/black" />
 
     <ImageView
         android:id="@+id/btn_back"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_margin="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="8dp"
         android:background="?attr/selectableItemBackground"
         android:foreground="?attr/selectableItemBackground"
         android:paddingLeft="12dp"
@@ -26,20 +28,38 @@
         android:paddingBottom="8dp"
         android:src="@drawable/ic_back"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
+
+    <ImageView
+        android:id="@+id/btn_switch_camera"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="16dp"
+        android:background="?attr/selectableItemBackground"
+        android:foreground="?attr/selectableItemBackground"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:src="@drawable/ic_switch_camera"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
 
     <ImageView
         android:id="@+id/btn_calibrate"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_margin="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="8dp"
         android:background="?attr/selectableItemBackground"
         android:foreground="?attr/selectableItemBackground"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
         android:src="@drawable/ic_setting"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
 
     <ImageView
         android:id="@+id/btn_capture"
@@ -51,7 +71,8 @@
         android:src="@drawable/ic_capture"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:tint="@color/white" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
