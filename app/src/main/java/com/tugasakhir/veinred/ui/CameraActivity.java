@@ -35,7 +35,7 @@ public class CameraActivity extends AppCompatActivity {
     private ActivityCameraBinding binding;
     public UsbPermissionHandler usbPermissionHandler = new UsbPermissionHandler();
     public LinkedBlockingQueue<BitmapFrameBuffer> framesBuffer = new LinkedBlockingQueue<>(21);
-    public static FusionMode curr_fusion_mode = FusionMode.THERMAL_FUSION;
+    public static FusionMode curr_fusion_mode = FusionMode.THERMAL_ONLY;
     ScaleGestureDetector mScaleGestureDetector;
     private ImageWriter imageWriter = null;
     public static double left = 0;
