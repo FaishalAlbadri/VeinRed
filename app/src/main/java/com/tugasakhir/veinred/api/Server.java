@@ -10,5 +10,5 @@ public class Server {
     //veinredid@gmail.com
 
     //Password
-    //VeinredJaya1!
+    //VeinredJaya1
 }

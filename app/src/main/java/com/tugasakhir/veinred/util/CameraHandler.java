@@ -20,6 +20,7 @@ import com.flir.thermalsdk.live.connectivity.ConnectionStatusListener;
 import com.flir.thermalsdk.live.discovery.DiscoveryEventListener;
 import com.flir.thermalsdk.live.discovery.DiscoveryFactory;
 import com.flir.thermalsdk.live.streaming.ThermalImageStreamListener;
+import com.tugasakhir.veinred.ui.CameraActivity;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -176,7 +177,8 @@ public class CameraHandler {
      *
      * @return the FLIR ONE Camera if already found, else null
      */
-    @Nullable Identity getFlirOne() {
+    @Nullable
+    public Identity getFlirOne() {
         for (Identity foundCameraIdentity : cameraIndentities) {
             boolean isFlirOneEmulator = foundCameraIdentity.deviceId.contains("EMULATED FLIR ONE");
             boolean isCppEmulator = foundCameraIdentity.deviceId.contains("C++ Emulator");
@@ -208,8 +210,8 @@ public class CameraHandler {
         return temperatureUnit;
     }
 
-    static double thermal_width = -1;
-    static double thermal_height = -1;
+    public static double thermal_width = -1;
+    public static double thermal_height = -1;
 
     /**
      * Function to process a Thermal Image and update UI
@@ -228,7 +230,7 @@ public class CameraHandler {
 
             // Get Bitmaps
             if (thermalImage.getFusion() != null) {
-//                thermalImage.getFusion().setFusionMode(FlirCameraActivity.curr_fusion_mode);
+                thermalImage.getFusion().setFusionMode(CameraActivity.curr_fusion_mode);
             }
             //Get a bitmap with only IR data
             Bitmap msxBitmap = BitmapAndroid.createBitmap(thermalImage.getImage()).getBitMap();
@@ -249,144 +251,6 @@ public class CameraHandler {
 
         }
     };
-
-//    private void drawGuideRectangle(Canvas canvas, Paint paint, ThermalImage thermalImage, Bitmap msxBitmap){
-//        // Get Ratios
-//        float ratiow = (float) msxBitmap.getWidth() / (float) thermalImage.getWidth();
-//        float ratioh = (float) msxBitmap.getHeight() / (float) thermalImage.getHeight();
-//        int width = (int)FlirCameraActivity.width;
-//        int height = (int)FlirCameraActivity.height;
-//        if (width <= 0 && height <= 0) {
-//            return;
-//        }
-//
-//        // calculate left and top positioning coordinates to display the rectangle in the middle
-//        float left = (float)FlirCameraActivity.left;
-//        float top = (float)FlirCameraActivity.top;
-//
-//        // Create a rectangle based off those measurements in order to poll the data for statistics
-//        Rectangle rect = new Rectangle((int) left, (int) top, width, height);
-//        if (left + width > thermalImage.getWidth() || top + height > thermalImage.getHeight()) {
-//            throw new IndexOutOfBoundsException();
-//        }
-//
-//        // Draw Rectangle
-//        paint.setColor(Color.GREEN);
-//        paint.setStyle(Paint.Style.STROKE);
-//        paint.setStrokeWidth(2 * ratiow);
-//        canvas.drawRect(left * ratiow, top * ratioh, (left+rect.width)*ratiow, (top+rect.height)*ratioh, paint);
-//
-//        // Get statistic points and calculate them.
-//        MeasurementRectangle mRect;
-//        try {
-//            thermalImage.getMeasurements().clear();
-//            thermalImage.getMeasurements().addRectangle(rect.x, rect.y, rect.width, rect.height);
-//            mRect = thermalImage.getMeasurements().getRectangles().get(0);
-//        } catch (Exception e){
-//            Log.e(TAG, "Could not calculate Guide Rectangle in Thermal Image");
-//            e.printStackTrace();
-//            return;
-//        }
-//        try {
-//            mRect.setColdSpotMarkerVisible(true);
-//            mRect.setHotSpotMarkerVisible(true);
-//        } catch (MeasurementException e){
-//            e.printStackTrace();
-//        }
-//        double min = (Math.round(mRect.getMin().value * 100.0) / 100.0);
-//        double max = (Math.round(mRect.getMax().value * 100.0) / 100.0);
-//        double avg = (Math.round((mRect.getAverage().value) * 100.0) / 100.0);
-//
-//        // Write to log
-//        // TODO: Should this also be implemented for the facial detection square?
-//        long curr_time = System.currentTimeMillis();
-//        if(tempLog == null || tempLog.size() == 0){
-//            currentReadingStartMillis = curr_time;
-//        }
-//        // TODO - change this to 5 min instead of 15 sec
-//        if((curr_time- currentReadingStartMillis )/1000 > 15){
-//            Log.e("ANDREI", "Saving current log and clearning log queue");
-//            saveLog(FlirCameraActivity.getInstance(),true);
-//            tempLog.clear();
-//        } else{
-//            try {
-//                assert tempLog != null;
-//                tempLog.put(curr_time, "Min: " + min + "; Max: " + max + "; Avg: " + avg);
-//            } catch (AssertionError e){
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        // Draw statistics to canvas
-//        paint.setTextSize(20 * ratiow);
-//        paint.setStyle(Paint.Style.FILL);
-//        canvas.drawText("Avg: " + avg + " " + thermalImage.getTemperatureUnit().toString().charAt(0), left * ratiow,(top -5) * ratioh,paint);
-//        paint.setColor(Color.RED);
-//        canvas.drawCircle((int)(mRect.getHotSpot().x*ratiow), (int)(mRect.getHotSpot().y*ratioh), 5 * ratiow, paint);
-//        canvas.drawText(max + " " + thermalImage.getTemperatureUnit().toString().charAt(0), mRect.getHotSpot().x * ratiow, (mRect.getHotSpot().y + 20)*ratioh, paint);
-//        paint.setColor(Color.BLUE);
-//        canvas.drawCircle(mRect.getColdSpot().x*ratiow, mRect.getColdSpot().y*ratioh, 5 * ratiow, paint);
-//        canvas.drawText(min+ " " + thermalImage.getTemperatureUnit().toString().charAt(0), mRect.getColdSpot().x * ratiow, (mRect.getColdSpot().y + 20)*ratioh, paint);
-//    }
-
-    private void drawFaceRectangle(Canvas canvas, Paint paint, ThermalImage thermalImage, Bitmap dcBitmap, Bitmap msxBitmap){
-        // Calculate Ratios
-        float ratiow = (float) msxBitmap.getWidth() / (float) thermalImage.getWidth();
-        float ratioh = (float) msxBitmap.getHeight() / (float) thermalImage.getHeight();
-        float ratiow2 = (float) dcBitmap.getWidth() / (float) msxBitmap.getWidth();
-        float ratioh2 = (float) dcBitmap.getHeight() / (float) msxBitmap.getHeight();
-
-        // Convert Bitmap
-        Bitmap mFaceBitmap = dcBitmap.copy(Bitmap.Config.RGB_565, true);
-        FaceDetector faceDetector = new FaceDetector(mFaceBitmap.getWidth(), mFaceBitmap.getHeight(), 1);
-        FaceDetector.Face[] faces = new FaceDetector.Face[1];
-
-        // Find Faces
-        int facesFound = faceDetector.findFaces(mFaceBitmap, faces);
-        if(facesFound > 0) {
-            PointF midPoint = new PointF();
-            faces[0].getMidPoint(midPoint);
-            float confidence = faces[0].confidence();
-            if(confidence >= 0.51) {      // At least 51% confidence that this is indeed a face
-                // Calculate Face Detection Square
-                float eyeDistance = faces[0].eyesDistance();
-                float left2 = (midPoint.x - eyeDistance) / ratiow2;
-                if (left2 < 0) {
-                    left2 = 0.0f;
-                }
-                float top2 = (midPoint.y - eyeDistance) / ratioh2;
-                if (top2 < 0) {
-                    top2 = 0.0f;
-                }
-                float right2 = (midPoint.x + eyeDistance) / ratiow2;
-                if (right2 > canvas.getWidth()) {
-                    right2 = canvas.getWidth();
-                }
-                float bottom2 = (midPoint.y + eyeDistance) / ratioh2;
-                if (bottom2 > canvas.getHeight()) {
-                    bottom2 = canvas.getHeight();
-                }
-
-                // Paint Face Detection Square and Thermal Values to Canvas
-                paint.setColor(Color.MAGENTA);
-                paint.setStyle(Paint.Style.STROKE);
-                canvas.drawRect(left2, top2, right2, bottom2, paint);
-                try {
-                    // Calculate and draw Facial Detection Square values for Thermal Image (different resolution)
-                    thermalImage.getMeasurements().addRectangle((int) (left2 / ratiow), (int) (top2 / ratioh), (int) ((right2 - left2) / ratiow), (int) ((bottom2 - top2) / ratioh));
-                    MeasurementRectangle mRect2 = thermalImage.getMeasurements().getRectangles().get(1);
-                    double avg2 = (Math.round((mRect2.getAverage().value) * 100.0) / 100.0);
-                    paint.setTextSize(20 * ratiow);
-                    paint.setStyle(Paint.Style.FILL);
-                    canvas.drawText("Avg: " + avg2 + " " + thermalImage.getTemperatureUnit().toString().charAt(0), left2, (top2 - 5), paint);
-                } catch (Exception e) {
-                    Log.e(TAG, "Could not calculate Face Detection square in Thermal Image");
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
 
     public static void saveLog(Context ctx, boolean shouldAppend) {
         StringBuilder msgLog = new StringBuilder();

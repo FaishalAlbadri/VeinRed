@@ -74,7 +74,7 @@ public class GalleryActivity extends AppCompatActivity {
         galleryAdapter.delete();
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "veinred");
         File[] files = file.listFiles();
-        Arrays.sort(files, Comparator.comparingLong(File::lastModified));
+        Arrays.sort(files, Comparator.comparingLong(File::lastModified).reversed());
         if (files != null) {
             for (File file1 : files) {
                 if (file1.getPath().endsWith(".png") || file1.getPath().endsWith(".jpg")) {

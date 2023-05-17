@@ -4,6 +4,7 @@ import com.flir.thermalsdk.image.DistanceUnit;
 import com.flir.thermalsdk.image.ThermalImage;
 import com.flir.thermalsdk.image.palettes.Palette;
 import com.flir.thermalsdk.image.palettes.PaletteManager;
+import com.tugasakhir.veinred.ui.CameraActivity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,8 +21,6 @@ public class CalibrationHandler {
     public static DistanceUnit distanceUnit = DistanceUnit.METER;
     public static Palette palette = null;
     private static final String[] palettes = {"iron", "Arctic", "blackhot", "bw", "Coldest", "ColorWheel_Redhot", "ColorWheel6", "ColorWheel12", "DoubleRainbow2", "lava", "rainbow", "rainHC", "whitehot", "Hottest"};
-    public static boolean calibrationButtonHidden = true;
-
     public CalibrationHandler() {
     }
 
@@ -112,9 +111,6 @@ public class CalibrationHandler {
         }
         if (transmission == -1) {
             transmission = img.getImageParameters().getTransmission();
-        }
-        if (calibrationButtonHidden) {
-//            FlirCameraActivity.getInstance().toggleCalibrationButton();
         }
     }
 

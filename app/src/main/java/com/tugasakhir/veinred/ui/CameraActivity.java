@@ -3,13 +3,13 @@ package com.tugasakhir.veinred.ui;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ScaleGestureDetector;
+import android.widget.Toast;
 
-import com.flir.thermalsdk.androidsdk.live.connectivity.UsbPermissionHandler;
 import com.flir.thermalsdk.image.fusion.FusionMode;
 import com.flir.thermalsdk.live.Identity;
 import com.flir.thermalsdk.live.connectivity.ConnectionStatusListener;
@@ -19,52 +19,81 @@ import com.tugasakhir.veinred.util.BitmapFrameBuffer;
 import com.tugasakhir.veinred.util.CameraHandler;
 import com.tugasakhir.veinred.util.FrameDataHolder;
 import com.tugasakhir.veinred.util.ImageWriter;
+import com.tugasakhir.veinred.util.UsbPermissionHandler;
+
 import static com.tugasakhir.veinred.base.VeinredApplication.cameraHandler;
 import static com.tugasakhir.veinred.base.VeinredApplication.connectedCameraIdentity;
 
 import org.opencv.android.OpenCVLoader;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class CameraActivity extends AppCompatActivity {
 
     private static final String TAG = "CameraActivity";
-    public static final String CONNECTED = "CONNECTED";
-    public static final String CONNECTING = "CONNECTING";
-    public static final String DISCONNECTED = "DISCONNECTED";
-    public static final String DISCONNECTING = "DISCONNECTING";
     private ActivityCameraBinding binding;
     public UsbPermissionHandler usbPermissionHandler = new UsbPermissionHandler();
     public LinkedBlockingQueue<BitmapFrameBuffer> framesBuffer = new LinkedBlockingQueue<>(21);
     public static FusionMode curr_fusion_mode = FusionMode.THERMAL_ONLY;
     ScaleGestureDetector mScaleGestureDetector;
     private ImageWriter imageWriter = null;
-
-    @SuppressLint("StaticFieldLeak")
-    private static CameraActivity instance;
-
     public static double left = 0;
     public static double top = 0;
     public static double width = 200;
     public static double height = 200;
+    int touchx = -1;
+    int touchy = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityCameraBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        binding.btnBack.setOnClickListener(v -> onBackPressed());
+        binding.btnCapture.setOnClickListener(v -> onCaptureImage());
+        binding.btnCalibrate.setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), CalibrateActivity.class));
+        });
+
+        OpenCVLoader.initDebug();
+        mScaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
+        connectCamera(cameraHandler.getFlirOne());
     }
 
-    private void disconnectCamera() {
-        updateConnectionText(connectedCameraIdentity, DISCONNECTING);
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector scaleGestureDetector){
+            if(binding.imgCamera!=null && CameraHandler.thermal_width != -1 && CameraHandler.thermal_height != -1){
+                double pos_w = width * scaleGestureDetector.getScaleFactor();
+                double pos_h = height * scaleGestureDetector.getScaleFactor();
+
+                touchx = (int)(scaleGestureDetector.getFocusX());
+                touchy = (int)(scaleGestureDetector.getFocusY());
+
+                if(pos_w > 0 && pos_h > 0 && left+pos_w < CameraHandler.thermal_width && top + pos_h < CameraHandler.thermal_height){
+                    width = pos_w;
+                    height = pos_h;
+                }
+            }
+            return true;
+        }
+    }
+
+    private void onCaptureImage() {
+        imageWriter = new ImageWriter(this);
+    }
+
+    private void  disconnectCamera() {
         connectedCameraIdentity = null;
         Log.d(TAG, "disconnect: Called with: connectedCameraIdentity = [" + connectedCameraIdentity + "]");
         new Thread(() -> {
             cameraHandler.disconnectCamera();
-            runOnUiThread(() -> updateConnectionText(null, DISCONNECTED));
         }).start();
     }
+
 
     private void connectCamera(Identity identity) {
         if (connectedCameraIdentity != null) {
@@ -79,7 +108,6 @@ public class CameraActivity extends AppCompatActivity {
 
         connectedCameraIdentity = identity;
 
-        updateConnectionText(identity, CONNECTING);
         if (UsbPermissionHandler.isFlirOne(identity)) {
             usbPermissionHandler.requestFlirOnePermisson(identity, this, permissionListener);
         } else {
@@ -91,41 +119,59 @@ public class CameraActivity extends AppCompatActivity {
             try {
                 cameraHandler.connectCamera(identity, connectionStatusListener);
                 runOnUiThread(() -> {
-                    updateConnectionText(identity, CONNECTED);
                     cameraHandler.startStream(streamDataListener);
                 });
             } catch (IOException e) {
                 runOnUiThread(() -> {
                     Log.d(TAG, "Could not connect: " + e);
-                    updateConnectionText(identity, DISCONNECTED);
+                    disconnectCamera();
+                    connectCamera(cameraHandler.getFlirOne());
                 });
             }
         }).start();
     }
 
-    private void updateConnectionText(Identity identity, String status) {
-        String deviceId = identity != null ? " " + identity.deviceId : "";
-    }
-
     public ConnectionStatusListener connectionStatusListener = errorCode -> {
         Log.d(TAG, "onDisconnected: errorCode:" + errorCode);
-        runOnUiThread(() -> updateConnectionText(connectedCameraIdentity, DISCONNECTED));
     };
 
     public final CameraHandler.StreamDataListener streamDataListener = new CameraHandler.StreamDataListener() {
         @Override
         public void images(BitmapFrameBuffer dataHolder) {
-
+            runOnUiThread(() -> {
+                binding.imgCamera.setImageBitmap(dataHolder.dcBitmap);
+            });
         }
 
         @Override
         public void images(Bitmap msxBitmap, Bitmap dcBitmap) {
+            try {
+                framesBuffer.put(new BitmapFrameBuffer(msxBitmap, dcBitmap));
+            } catch (InterruptedException e) {
+                //if interrupted while waiting for adding a new item in the queue
+                Log.e(TAG, "images(), unable to add incoming images to frames buffer, exception:" + e);
+            }
 
+            runOnUiThread(() -> {
+                Log.d(TAG, "framebuffer size:" + framesBuffer.size());
+                BitmapFrameBuffer poll = framesBuffer.poll();
+                if (poll != null) {
+                    binding.imgCamera.setImageBitmap(poll.dcBitmap);
+                }
+            });
         }
 
         @Override
         public void images(FrameDataHolder dataHolder) {
-
+            try {
+                if (imageWriter != null) {
+                    imageWriter.saveImages(dataHolder);
+                    imageWriter = null;
+                    Toast.makeText(getApplicationContext(), "Saved Image", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     };
 
@@ -145,4 +191,11 @@ public class CameraActivity extends AppCompatActivity {
             Snackbar.make(binding.parentlayout, "Error when asking for permission for FLIR ONE, error:" + errorType + " identity:" + identity, Snackbar.LENGTH_LONG).show();
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        disconnectCamera();
+        finish();
+        super.onBackPressed();
+    }
 }

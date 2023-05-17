@@ -101,6 +101,7 @@ public class HomeActivity extends AppCompatActivity implements NewsContract.news
         OpenCVLoader.initDebug();
         ThermalSdkAndroid.init(getApplicationContext(), ThermalLog.LogLevel.WARNING);
         cameraHandler = new CameraHandler();
+        startDiscovery();
     }
 
     private void setNews() {
@@ -136,7 +137,7 @@ public class HomeActivity extends AppCompatActivity implements NewsContract.news
         fotoHomeAdapter.delete();
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "veinred");
         File[] files = file.listFiles();
-        Arrays.sort(files, Comparator.comparingLong(File::lastModified));
+        Arrays.sort(files, Comparator.comparingLong(File::lastModified).reversed());
         if (files != null) {
             for (File file1 : files) {
                 if (file1.getPath().endsWith(".png") || file1.getPath().endsWith(".jpg")) {
