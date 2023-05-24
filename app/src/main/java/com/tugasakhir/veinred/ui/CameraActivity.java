@@ -73,6 +73,14 @@ public class CameraActivity extends AppCompatActivity {
                 modeCamera = 0;
             }
         });
+
+        binding.btnFilter.setOnClickListener(v -> {
+            if (modeCamera == 0) {
+                modeCamera = 1;
+            }
+            switchFilter();
+
+        });
     }
 
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
@@ -91,6 +99,29 @@ public class CameraActivity extends AppCompatActivity {
                 }
             }
             return true;
+        }
+    }
+
+    public void switchFilter() {
+        switch (curr_fusion_mode) {
+            case THERMAL_ONLY:
+                curr_fusion_mode = FusionMode.BLENDING;
+                break;
+            case BLENDING:
+                curr_fusion_mode = FusionMode.MSX;
+                break;
+            case MSX:
+                curr_fusion_mode = FusionMode.THERMAL_FUSION;
+                break;
+            case THERMAL_FUSION:
+                curr_fusion_mode = FusionMode.PICTURE_IN_PICTURE;
+                break;
+            case PICTURE_IN_PICTURE:
+                curr_fusion_mode = FusionMode.COLOR_NIGHT_VISION;
+                break;
+            case COLOR_NIGHT_VISION:
+                curr_fusion_mode = FusionMode.THERMAL_ONLY;
+                break;
         }
     }
 
