@@ -8,6 +8,9 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ScaleGestureDetector;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.Toast;
 
 import com.flir.thermalsdk.image.fusion.FusionMode;
@@ -185,6 +188,10 @@ public class CameraActivity extends AppCompatActivity {
                 if (imageWriter != null) {
                     imageWriter.saveImages(dataHolder);
                     imageWriter = null;
+                    Animation animation = new AlphaAnimation(1, 0);
+                    animation.setDuration(300);
+                    animation.setInterpolator(new LinearInterpolator());
+                    binding.imgCamera.startAnimation(animation);
                     Toast.makeText(getApplicationContext(), "Saved Image", Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
